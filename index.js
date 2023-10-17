@@ -30,10 +30,18 @@ async function run() {
     // database connection
     const techBuddyDB = client.db('TechBuddyDB');
     const productDB = techBuddyDB.collection('Product');
+    const brandDB = techBuddyDB.collection('Brand');
 
     // get product from database
     app.get('/products', async(req, res) => {
         const cursor = productDB.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+    // get brand from database
+    app.get('/brands', async(req, res) => {
+        const cursor = brandDB.find();
         const result = await cursor.toArray();
         res.send(result);
     })
@@ -47,10 +55,17 @@ async function run() {
         res.send(result);
     })
 
-    // insert into the database
-    app.use('/products', async (req, res) => {
+    // insert product into the database
+    app.post('/products', async (req, res) => {
         const product = req.body;
         const result = await productDB.insertOne(product);
+        res.send(result);
+    })
+
+    // insert brand  into the database
+    app.post('/brands', async (req, res) => {
+        const brand = req.body;
+        const result = await brandDB.insertOne(brand);
         res.send(result);
     })
 
