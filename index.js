@@ -55,6 +55,15 @@ async function run() {
         res.send(result);
     })
 
+    // brand wise data from database
+    app.get('/brands/:id', async (req, res) => {
+        const name = req.params.id;
+        const query = {name: name}
+        const cursor = brandDB.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
     // insert product into the database
     app.post('/products', async (req, res) => {
         const product = req.body;
