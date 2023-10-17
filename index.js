@@ -31,6 +31,22 @@ async function run() {
     const techBuddyDB = client.db('TechBuddyDB');
     const productDB = techBuddyDB.collection('Product');
 
+    // get product from database
+    app.get('/products', async(req, res) => {
+        const cursor = productDB.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+    // brand wise product from database
+    app.get('/products/:id', async (req, res) => {
+        const brand = req.params.id;
+        const query = {brand: brand}
+        const cursor = productDB.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
     // insert into the database
     app.use('/products', async (req, res) => {
         const product = req.body;
