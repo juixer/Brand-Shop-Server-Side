@@ -54,6 +54,12 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
+    app.get('/topRating', async (req, res) => {
+        const query= {rating: '5'}
+        const cursor = productDB.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
+    })
 
     // brand wise data from database
     app.get('/brands/:id', async (req, res) => {
