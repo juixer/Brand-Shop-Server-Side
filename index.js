@@ -31,6 +31,7 @@ async function run() {
     const techBuddyDB = client.db('TechBuddyDB');
     const productDB = techBuddyDB.collection('Product');
     const brandDB = techBuddyDB.collection('Brand');
+    const subscriberDB = techBuddyDB.collection('Subscriber');
 
     // get product from database
     app.get('/products', async(req, res) => {
@@ -54,11 +55,22 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
+
+    // top rating product from database
     app.get('/topRating', async (req, res) => {
         const query= {rating: '5'}
         const cursor = productDB.find(query);
         const result = await cursor.toArray();
         res.send(result);
+    })
+
+    // Category wise  product from database
+    app.get('/category/:id', async (req, res) => {
+      const category = req.params.id;
+      const query = {type : category}
+      const cursor = productDB.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
     })
 
     // brand wise data from database
@@ -78,11 +90,25 @@ async function run() {
       res.send(result);
     })
 
+    // get subscriber from database
+    app.get('/subscribers', async (req, res) => {
+      const cursor = subscriberDB.find()
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
     // insert product into the database
     app.post('/products', async (req, res) => {
         const product = req.body;
         const result = await productDB.insertOne(product);
         res.send(result);
+    })
+
+    // insert subscriber into the database
+    app.post('/subscribers', async (req, res) => {
+      const subscriber = req.body;
+      const result = await subscriberDB.insertOne(subscriber)
+      res.send(result);
     })
 
     // insert brand  into the database
