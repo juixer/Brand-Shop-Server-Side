@@ -55,6 +55,7 @@ async function run() {
         res.send(result);
     })
 
+
     // brand wise product from database
     app.get('/products/:id', async (req, res) => {
         const brand = req.params.id;
@@ -80,6 +81,7 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
+
 
     // brand wise data from database
     app.get('/brands/:id', async (req, res) => {
@@ -112,11 +114,40 @@ async function run() {
         res.send(result);
     })
 
+    // get specific user
+    app.get('/user/:id', async (req, res) => {
+        const email = req.params.email
+        const query ={email : email}
+        const result = await userDB.findOne(query);
+        res.send(result);
+    })
+
     // insert User into the database
     app.post('/users', async (req, res) => {
       const user = req.body;
       const result = await userDB.insertOne(user);
       res.send(result);
+    })
+
+    app.put('/users', async (req, res) => {
+      const user = req.body;
+      const filter = {email : user.email}
+      const option = {upsert : true}
+      const updateDoc = {
+        $set:{
+          name: user.name,
+          email: user.email,
+          photo: user.photo
+        }
+      }
+      const result = await userDB.updateOne(filter, updateDoc, option);
+      res.send(result);
+    })
+
+    // update Cart into the database
+    app.patch('/users/:id', async (req, res) => {
+      const email = req.params.id;
+      const cart = req.body;
     })
 
     // insert subscriber into the database
