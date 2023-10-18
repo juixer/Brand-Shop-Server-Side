@@ -32,12 +32,20 @@ async function run() {
     const productDB = techBuddyDB.collection('Product');
     const brandDB = techBuddyDB.collection('Brand');
     const subscriberDB = techBuddyDB.collection('Subscriber');
+    const userDB = techBuddyDB.collection('User');
 
     // get product from database
     app.get('/products', async(req, res) => {
         const cursor = productDB.find();
         const result = await cursor.toArray();
         res.send(result);
+    })
+
+    // get user from database
+    app.get('/users', async(req, res) => {
+      const cursor = userDB.find();
+      const result = await cursor.toArray();
+      res.send(result);
     })
 
     // get brand from database
@@ -102,6 +110,13 @@ async function run() {
         const product = req.body;
         const result = await productDB.insertOne(product);
         res.send(result);
+    })
+
+    // insert User into the database
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const result = await userDB.insertOne(user);
+      res.send(result);
     })
 
     // insert subscriber into the database
