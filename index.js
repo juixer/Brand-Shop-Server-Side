@@ -124,6 +124,7 @@ async function run() {
 
     
 
+    // insert user into database if user already exists
     app.put('/users', async (req, res) => {
       const user = req.body;
       const filter = {email : user.email}
@@ -155,12 +156,25 @@ async function run() {
         res.send(result);
     })
 
+    app.patch('/user/:id', async (req, res) => {
+      const email = req.params.id;
+      const cartItem = req.body;
+      const filter = {email : email}
+      const updateCart = {
+        $push:{
+          cart : cartItem._id,
+        }
+      }
+      const result = await userDB.updateOne(filter,updateCart)
+      res.send(result);
+    })
+
     // Update product from the database
 
     app.put('/product/:id', async (req, res) => {
       const product = req.body;
       const id = req.params.id;
-      
+      console.log(id);
       const filter = {_id : new ObjectId(id)};
       const options = {upsert : true};
       const updateProduct = {
