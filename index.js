@@ -125,7 +125,7 @@ async function run() {
     
 
     // insert user into database if user already exists
-    app.put('/users', async (req, res) => {
+    app.patch('/users', async (req, res) => {
       const user = req.body;
       const filter = {email : user.email}
       const option = {upsert : true}
@@ -134,7 +134,6 @@ async function run() {
           name: user.name,
           email: user.email,
           photo: user.photo,
-          cart: user.cart
         }
       }
       const result = await userDB.updateOne(filter, updateDoc, option);
@@ -156,16 +155,32 @@ async function run() {
         res.send(result);
     })
 
+    // delete cart each data
+    app.delete('/user/:id/cart/:itemId', async (req, res) => {
+      const email =req.params.id;
+      const itemId = req.params.itemId;
+      const filter = {email: email}
+      const updateCart = {
+        $pull:{
+          cart: {_id : itemId}
+        }
+      }
+      const result = await userDB.updateOne(filter,updateCart)
+      res.send(result);
+    })
+
+    // add cart to user 
     app.patch('/user/:id', async (req, res) => {
       const email = req.params.id;
       const cartItem = req.body;
       const filter = {email : email}
+      const option = {upsert : true}
       const updateCart = {
         $push:{
-          cart : cartItem._id,
+          cart : cartItem,
         }
       }
-      const result = await userDB.updateOne(filter,updateCart)
+      const result = await userDB.updateOne(filter,updateCart,option)
       res.send(result);
     })
 
