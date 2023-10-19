@@ -5,7 +5,6 @@ const app = express()
 const port = process.env.PORT ||5000
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
-
 app.use(express.json())
 app.use(cors())
 
@@ -25,7 +24,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     // database connection
     const techBuddyDB = client.db('TechBuddyDB');
