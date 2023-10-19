@@ -116,18 +116,13 @@ async function run() {
 
     // get specific user
     app.get('/user/:id', async (req, res) => {
-        const email = req.params.email
+        const email = req.params.id;
         const query ={email : email}
         const result = await userDB.findOne(query);
         res.send(result);
     })
 
-    // insert User into the database
-    app.post('/users', async (req, res) => {
-      const user = req.body;
-      const result = await userDB.insertOne(user);
-      res.send(result);
-    })
+    
 
     app.put('/users', async (req, res) => {
       const user = req.body;
@@ -137,18 +132,14 @@ async function run() {
         $set:{
           name: user.name,
           email: user.email,
-          photo: user.photo
+          photo: user.photo,
+          cart: user.cart
         }
       }
       const result = await userDB.updateOne(filter, updateDoc, option);
       res.send(result);
     })
 
-    // update Cart into the database
-    app.patch('/users/:id', async (req, res) => {
-      const email = req.params.id;
-      const cart = req.body;
-    })
 
     // insert subscriber into the database
     app.post('/subscribers', async (req, res) => {
